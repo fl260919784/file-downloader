@@ -1,9 +1,9 @@
 #pragma once
 
 #include <curl/curl.h>
+#include <mutex>
 
 namespace downloader {
-
 // NOTE: cpr + unique_ptr
 class CurlHolder final {
   public:
@@ -21,6 +21,7 @@ class CurlHolder final {
 
   private:
     void release(CURL*) noexcept;
+    static std::mutex& curl_easy_init_mutex();
 
   private:
     CURL *handler = nullptr;

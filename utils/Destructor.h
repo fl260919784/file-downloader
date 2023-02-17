@@ -3,7 +3,6 @@
 #include <functional>
 
 namespace downloader {
-
 class Destructor final {
   public:
     Destructor(std::function<void()> rhs) : dtor(rhs) {}

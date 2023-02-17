@@ -1,39 +1,23 @@
 # 概要说明
 
-当前程序主要通过
+## 概要思路
 
-# 概要思路
+**当前方案强依赖Content-Length + Range: bytes**
 
-1. 通过HTTP Response Header中的字段Accept-Ranges确认当前HTTP Server是否支持分段下载
-2. 通过HTTP 的HEAD 请求，查询
+1. 通过发送HTTP HEAD请求，分析Content-Length来获取总文件大小
+   1. **如果文件大于int64长度，则当前方案不支持（libcurl通过Content-Length获取长度存在溢出）**
+2. 通过Range: bytes来实现分段下载任务拆分
 
-## dispatcher相关
+## 多任务下载说明
 
-1. dispatcher通过从thread pool获取task owner，并分派任务
-2. thread pool中，若无空闲线程，则可以选择阻塞（如通过ThreadPool::get接口是阻塞）、也支持非阻塞（如通过ThreadPool::try_get）
+1. Executor表达的是无状态的线程池，启动后持续的从TaskGenerator中获取任务，当获取任务为空时，表达所有任务结束
+2. 下载任务切分，以及下载状态控制均为TaskGenerator的实现类DownloaderTaskGenerator控制
 
 ## 文件写入相关
 
-1. 获取到整体内容的Centent-Length后，创建文件，并resize好
-2. 后续每个分段写入到对应的位置即可
-3. **好处:**文件不用合并
+1. 并发写入依赖lseek/lseek64，通过计算好偏移量直接写入文件，各下载任务间无需相互等待或感知
+2. **好处:** 文件不用合并，下载的各任务间无需互相感知
 
-
-```c++
-using Callable = std::function<bool()>;
-
-class TaskEngine {
-  public:
-    void push(Callable);
-
-  private:
-    
-    mutable std::mutex lock;
-    mutable std::condition_variable xx; // 生产者与消费者相互通知
-    std::list<Callable> tasks;
-    std::vector<std::thread> pools;     // 线程创建完成后，通过lock锁来安全的获取task任务，并执行
-};
-```
 
 # 环境与依赖说明
 

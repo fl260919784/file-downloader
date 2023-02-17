@@ -3,7 +3,6 @@
 #include <stdio.h>
 
 namespace downloader {
-
 class FileGuard final {
   public:
     explicit FileGuard(FILE *fd) : file(fd) { }
@@ -14,7 +13,7 @@ class FileGuard final {
     ~FileGuard();
 
   public:
-    FILE* get() const {
+    FILE* get() const noexcept {
       return this->file;
     }
 

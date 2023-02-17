@@ -1,9 +1,16 @@
 #include <utils/CurlHolder.h>
 
 namespace downloader {
-  
-CurlHolder::CurlHolder()
-  : handler(curl_easy_init()) {
+std::mutex& CurlHolder::curl_easy_init_mutex() {
+  // C++11开始，语言规范能够确保局部静态变量的初始化是并发安全的
+  static std::mutex curl_easy_init_mutex_;
+  return curl_easy_init_mutex_;
+}
+
+CurlHolder::CurlHolder() {
+  std::lock_guard guard(this->curl_easy_init_mutex());
+  // curl_easy_init存在初始化全局数据，需要加锁确保并发安全
+  this->handler = curl_easy_init();
 }
 
 CurlHolder::CurlHolder(CurlHolder &&rhs) noexcept {

@@ -1,26 +1,18 @@
 #pragma once
 
 #include <downloader/FileDownloader.h>
-#include <utils/CurlHolder.h>
 
 namespace downloader {
-
 class EasyHTTPFileDownloader : public FileDownloader {
   public:
     EasyHTTPFileDownloader() = default;
-    EasyHTTPFileDownloader(const EasyHTTPFileDownloader&) = delete;
-    EasyHTTPFileDownloader(EasyHTTPFileDownloader &&) noexcept;
-    EasyHTTPFileDownloader& operator=(const EasyHTTPFileDownloader&) = delete;
-    EasyHTTPFileDownloader& operator=(EasyHTTPFileDownloader &&) noexcept;
+    EasyHTTPFileDownloader(const EasyHTTPFileDownloader&) = default;
+    EasyHTTPFileDownloader(EasyHTTPFileDownloader &&) noexcept = default;
+    EasyHTTPFileDownloader& operator=(const EasyHTTPFileDownloader&) = default;
+    EasyHTTPFileDownloader& operator=(EasyHTTPFileDownloader &&) noexcept = default;
+    ~EasyHTTPFileDownloader() = default;
 
   public:
-    bool download(const std::string &filename) override;
-    void set_url(const std::string &url);
-    void set_local_file(const std::string &filename);
-
-  private:
-    std::string local_file;
-    std::string url;
-    CurlHolder curl;
+    bool download(const std::string &url, const std::string &local_file) override;
 };
 }  // namespace downloader

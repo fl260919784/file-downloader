@@ -1,7 +1,6 @@
 #include <utils/FileGuard.h>
 
 namespace downloader {
-
 FileGuard::FileGuard(FileGuard &&rhs) noexcept {
   this->file = rhs.file;
   rhs.file = nullptr;

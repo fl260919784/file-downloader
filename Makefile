@@ -17,14 +17,14 @@ clean:
 	@echo "clean all"
 	@find . -name "*.o" -delete
 
-objs = ./utils/CurlHolder.o              			\
-			 ./utils/FileGuard.o               			\
-			 ./utils/FilenoGuard.o               	  \
-			 ./executor/ThreadPoolExecutor.o        \
-			 ./executor/DownloaderTaskGenerator.o   \
+objs = ./utils/CurlHolder.o                   \
+       ./utils/FileGuard.o                    \
+       ./utils/FilenoGuard.o                  \
+       ./executor/ThreadPoolExecutor.o        \
+       ./executor/DownloaderTaskGenerator.o   \
        ./downloader/EasyHTTPFileDownloader.o  \
-			 ./downloader/QuickHTTPFileDownloader.o \
-			 ./main.o
+       ./downloader/QuickHTTPFileDownloader.o \
+       ./main.o
 
 file-downloader: $(objs) main.o
 	$(CXX) $^ $(LDFLAGS) $(LIBS) -o $@

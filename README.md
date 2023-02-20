@@ -38,7 +38,7 @@ C++17
 + 安装说明
 
 ```
-apt instsall libcurl4-openssl-dev
+apt install libcurl4-openssl-dev
 引入背景： 依赖libcurl发起http等协议请求
 补充说明：动态链接没问题，即-lcurl
 ```
@@ -54,7 +54,7 @@ apt instsall libcurl4-openssl-dev
 + 安装说明
 
 ```
-apt instasll libboost-program-options-dev
+apt install libboost-program-options-dev
 引入背景： 解析命令行参数
 ```
 
